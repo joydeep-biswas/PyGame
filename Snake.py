@@ -15,8 +15,8 @@ pygame.display.set_caption("PyGame SNAKE")
 clock = pygame.time.Clock()
 
 # Game Variables
-gameOver = False
-endGame = False
+game_over = False
+end_game = False
 yMovement = True
 xMovement = True
 bodyLength = 1
@@ -32,7 +32,7 @@ yFood = random.randint(25, displayHeight-25)
 bodyList = []
 
 def gameReset() :
-    global gameOver, endGame, yMovement, xMovement, bodyLength, playerScore, xVelocity, yVelocity, xPosition, yPosition, xFood, yFood, bodyList
+    global game_over, end_game, yMovement, xMovement, bodyLength, playerScore, xVelocity, yVelocity, xPosition, yPosition, xFood, yFood, bodyList
     gameOver = False
     endGame = False
     yMovement = True
@@ -48,7 +48,7 @@ def gameReset() :
     bodyList = []
 
 # Game Loop
-while not endGame :
+while not end_game :
 
     # Checking Pressed Key
     for keyPress in pygame.event.get() :
@@ -73,19 +73,19 @@ while not endGame :
                 yVelocity = 5  
                 yMovement = True
                 xMovement = False
-            if keyPress.key == pygame.K_SPACE and gameOver:
+            if keyPress.key == pygame.K_SPACE and game_over:
                 gameReset()
-            if keyPress.key == pygame.K_ESCAPE and gameOver:
-                endGame = True
+            if keyPress.key == pygame.K_ESCAPE and game_over:
+                end_game = True
 
         if keyPress.type == pygame.QUIT :
-            endGame = True
+            end_game = True
         
     xPosition = xPosition + xVelocity
     yPosition = yPosition + yVelocity
 
     # Score Counter and Random Food Spawner
-    if abs(xPosition - xFood) < 7 and abs(yPosition - yFood) < 7 and not gameOver :
+    if abs(xPosition - xFood) < 7 and abs(yPosition - yFood) < 7 and not game_over :
         playerScore = playerScore + 1
         xFood = random.randint(35, displayWidth-35)
         yFood = random.randint(25, displayHeight-25)
@@ -93,18 +93,18 @@ while not endGame :
     
     # Colision Checking 1 (Wall Colision Checking)
     if xPosition < 1 or xPosition > 639 or yPosition < 1 or yPosition > 479 :
-        gameOver = True
+        game_over = True
 
     # Colision Checking 2 (Self Colision Checking)
     for x in bodyList[:len(bodyList)-1] :
         if x == headList and (not xMovement or not yMovement):
-            gameOver = True
+            game_over = True
     
     gameDisplay.fill(colorWhite)
     font = pygame.font.SysFont(None, 40)
 
     # Displaying Score and Game Over Message
-    if not gameOver :
+    if not game_over :
         text = font.render("{}".format(playerScore), True, (0, 0, 0))
         gameDisplay.blit(text, (320, 5))
         pygame.draw.rect(gameDisplay, colorRed, [xFood, yFood, 15, 15])
